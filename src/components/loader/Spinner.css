@@ -1,0 +1,33 @@
+.spinner {
+  min-width: 1rem;
+  min-height: 1rem;
+  border: 2.5px solid #fff;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+.dots-1 {
+  width: 1rem;
+  background: radial-gradient(circle closest-side, #ffffff 90%, #0000) 0 /
+    calc(80% / 3) 100% space;
+  clip-path: inset(0 100% 0 0);
+  animation: d1 1s steps(4) infinite;
+}
+
+@keyframes d1 {
+  to {
+    clip-path: inset(0 -34% 0 0);
+  }
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

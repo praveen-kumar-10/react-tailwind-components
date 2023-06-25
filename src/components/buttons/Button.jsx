@@ -2,13 +2,21 @@ import clsx from "clsx";
 import PropTypes from "prop-types";
 import Spinner from "../loader/Spinner";
 
-import { forwardRef, useMemo } from "react";
+import { forwardRef, useMemo, Fragment } from "react";
 
 /**
  * Loaders - https://dev.to/afif/i-made-100-css-loaders-for-your-next-project-4eje, https://dev.to/afif/i-made-100-css-loaders-for-your-next-project-4eje
  */
 
-const tailwindButtonClassName = `
+/**
+ * todos:
+ * Whenever ElementType is given, role & tabindex should be added. Also check the cursor: "pointer" should be maintained in all cases
+ * Add 'active' prop, so if passed the button will shown in active state.
+ * Add focus styles
+ * Check the Icon Buttons, 'aria-label' should be passed in this case for screen readers
+ */
+
+const tailwindButtonClassName = `inline
 py-2
 px-4 
 flex
@@ -20,6 +28,13 @@ focus:opacity-80
 disabled:opacity-75
 disabled:hover:opacity-75
 `;
+// focus:ring-4
+
+const SIZES = {
+  sm: "px-2 py-1 text-sm",
+  md: "px-4 py-2",
+  lg: "px-5 py-2.5 text-lg",
+};
 
 const VARIANTS = {
   text: "bg-transparent",
@@ -49,6 +64,7 @@ const OUTLINE_VARIANTS = {
 
 const Button = forwardRef((props, ref) => {
   const {
+    size = "md",
     type = "button",
     elementType: ElementType = "button",
     startIcon,
@@ -64,8 +80,21 @@ const Button = forwardRef((props, ref) => {
     loadingIndicator,
     children,
     disabled,
+    active,
     ...buttonProps
   } = props;
+
+  let accessibilityProps = useMemo(() => {
+    let accessibilityMap = new Map();
+
+    if (ElementType !== "button") {
+      console.log({ ElementType });
+      accessibilityMap.set("role", "button");
+      accessibilityMap.set("tabindex", "0");
+    }
+
+    return Object.entries(accessibilityMap);
+  }, [ElementType]);
 
   let buttonChildren = useMemo(() => {
     let btnChildren = [];
@@ -88,7 +117,6 @@ const Button = forwardRef((props, ref) => {
       else if (loaderPosition === "end")
         btnChildren.push(<Spinner {...loaderProps} />);
     }
-
     return btnChildren;
   }, [
     children,
@@ -104,17 +132,24 @@ const Button = forwardRef((props, ref) => {
 
   return (
     <ElementType
-      {...buttonProps}
-      {...{ ref, type, disabled: isLoading || disabled }}
+      {...{
+        ...buttonProps,
+        ...accessibilityProps,
+        ref,
+        type,
+        disabled,
+      }}
       className={clsx(
         tailwindButtonClassName?.split("\n")?.join(" "),
         variant && !outline && VARIANTS[variant],
         outline && ["border-2 border-solid", OUTLINE_VARIANTS[variant]],
+        size && SIZES[size],
+        isLoading && "cursor-wait",
         className
       )}
     >
-      {buttonChildren?.map((child) => (
-        <>{child}</>
+      {buttonChildren?.map((child, idx) => (
+        <Fragment key={idx}>{child}</Fragment>
       ))}
     </ElementType>
   );
@@ -122,6 +157,7 @@ const Button = forwardRef((props, ref) => {
 
 Button.propTypes = {
   type: PropTypes.oneOf(["button", "submit", "reset"]),
+  elementType: PropTypes.string,
   size: PropTypes.oneOf(["sm", "md", "lg"]),
   variant: PropTypes.oneOf([
     "text",
@@ -154,6 +190,7 @@ Button.propTypes = {
 Button.defaultProps = {
   type: "button",
   variant: "text",
+  elementType: undefined,
   outline: false,
   startIcon: undefined,
   endIcon: undefined,

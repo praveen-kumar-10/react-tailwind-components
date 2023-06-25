@@ -4,6 +4,7 @@ import Button from "./components/buttons/Button";
 
 import "./App.css";
 
+
 const row = `flex gap-4 flex-wrap`;
 
 const VARIANTS = [
@@ -52,10 +53,27 @@ function App() {
           </Button>
         ))}
       </div>
+      <div className='flex items-center gap-1'>
+        <Button variant="primary" size="sm">
+          Small
+        </Button>
+        <Button variant="primary" size="md">
+          Medium
+        </Button>
+        <Button variant="primary" size="lg">
+          Large
+        </Button>
+      </div>
       <div className={row}>
-        <Button elementType="button">Button Ele</Button>
-        <Button elementType="div">Div</Button>
-        <Button elementType="a">A</Button>
+        <Button variant="primary" elementType="button">
+          Button Ele
+        </Button>
+        <Button variant="primary" elementType="div">
+          Div
+        </Button>
+        <Button variant="primary" elementType="a" href="#">
+          Anchor
+        </Button>
       </div>
       <div className={row}>
         <Button variant="primary" isLoading>

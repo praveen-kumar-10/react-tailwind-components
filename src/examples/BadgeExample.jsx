@@ -2,6 +2,9 @@ import Badge from "../components/badge/Badge";
 
 import { ReactComponent as CheckMarkIcon } from "../assets/icons/checkmark/checkmark.svg";
 import { ReactComponent as CrossIcon } from "../assets/icons/close/close.svg";
+import { ReactComponent as MessageIcon } from "../assets/icons/message/message-square.svg";
+
+import NotificationBadge from "../components/badge/NotificationBadge";
 
 const VARIANTS = [
   "primary",
@@ -64,6 +67,37 @@ const BadgeExample = () => {
         </Badge>
         <Badge variant="success" size="xs" endIcon={CrossIcon} />
         <Badge variant="success" endIcon={CrossIcon} />
+      </div>
+
+      <div className={row}>
+        <NotificationBadge variant="success" content={1}>
+          <MessageIcon />
+        </NotificationBadge>
+        <NotificationBadge
+          variant="success"
+          content={1}
+          originX="right"
+          originY="bottom"
+        >
+          <MessageIcon />
+        </NotificationBadge>
+        <NotificationBadge
+          variant="success"
+          content={1}
+          originX="left"
+          originY="bottom"
+        >
+          <MessageIcon />
+        </NotificationBadge>
+
+        <NotificationBadge
+          variant="success"
+          content={1}
+          originX="left"
+          originY="top"
+        >
+          <MessageIcon />
+        </NotificationBadge>
       </div>
     </>
   );

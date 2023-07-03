@@ -12,7 +12,8 @@ export const badgeTheme = {
     danger: "bg-red-200 text-red-900 dark:text-red-900 font-bold",
     info: "bg-sky-200 text-sky-900 dark:text-sky-900 font-bold",
     dark: "bg-gray-200 text-gray-900 dark:text-gray-900 font-bold",
-    light: "bg-slate-100 dark:bg-slate-50/10 text-slate-900 dark:text-slate-200 font-bold",
+    light:
+      "bg-slate-100 dark:bg-slate-50/10 text-slate-900 dark:text-slate-200 font-bold",
     slate: "bg-slate-200 text-slate-900 dark:text-slate-900 font-bold",
     zinc: "bg-zinc-200 text-zinc-900 dark:text-zinc-900 font-bold",
     neutral: "bg-neutral-200 text-neutral-900 dark:text-neutral-900 font-bold",
@@ -35,6 +36,23 @@ export const badgeTheme = {
   },
   iconSizes: {
     sm: "w-5 h-5",
-    xs: "w-4 h-4"
-  }
+    xs: "w-4 h-4",
+  },
+};
+
+export const notificationBadgeTheme = {
+  base: "relative dark:text-white",
+  badge: {
+    base: "px-[4.5px] py-0 text-[9px] -translate-y-2/4 border-2 border-white dark:border-black scale-100 absolute top-0",
+    origin: {
+      top: {
+        left: "left-[3px] -translate-x-2/4 -translate-y-2/4 origin-top-left",
+        right: "right-[3px] translate-x-2/4 -translate-y-2/4 origin-top-right",
+      },
+      bottom: {
+        left: "left-[3px] -translate-x-2/4 translate-y-2/3 origin-bottom-left",
+        right: "right-[3px] translate-x-2/4 translate-y-2/3 ",
+      },
+    },
+  },
 };

@@ -9,6 +9,8 @@
   animation: rotation 1s linear infinite;
 }
 
+/* Dots Loader */
+
 .dots-1 {
   width: 1rem;
   background: radial-gradient(circle closest-side, #ffffff 90%, #0000) 0 /
@@ -29,5 +31,56 @@
   }
   100% {
     transform: rotate(360deg);
+  }
+}
+
+/* Grow Loader */
+
+.grow,
+.grow-1 {
+  width: 1.5rem;
+  height: 1.5rem;
+  display: inline-block;
+  position: relative;
+}
+
+.grow::after,
+.grow::before,
+.grow-1::after,
+.grow-1::before {
+  content: "";
+  box-sizing: border-box;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  animation: animGrow 2s linear infinite;
+}
+
+.grow::after,
+.grow::before {
+  background: #fff;
+}
+
+.grow-1::after,
+.grow-1::before {
+  border: 2px solid #fff;
+}
+
+.grow::after,
+.grow-1::after {
+  animation-delay: 1s;
+}
+
+@keyframes animGrow {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
   }
 }

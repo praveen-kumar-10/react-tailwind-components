@@ -1,6 +1,7 @@
 import React, { useState, useLayoutEffect } from "react";
 import PropTypes from "prop-types";
-import "./Ripple.scss";
+
+import "./Ripple.css";
 
 const useDebouncedRippleCleanUp = (rippleCount, duration, cleanUpFunction) => {
   useLayoutEffect(() => {
@@ -11,7 +12,7 @@ const useDebouncedRippleCleanUp = (rippleCount, duration, cleanUpFunction) => {
       bounce = setTimeout(() => {
         cleanUpFunction();
         clearTimeout(bounce);
-      }, duration * 4);
+      }, duration);
     }
 
     return () => clearTimeout(bounce);
@@ -32,29 +33,29 @@ const Ripple = (props) => {
       rippleContainer.width > rippleContainer.height
         ? rippleContainer.width
         : rippleContainer.height;
-    const x = event.pageX - rippleContainer.x - size / 2;
-    const y = event.pageY - rippleContainer.y - size / 2;
+
+    const x = event.clientX - rippleContainer.x - size / 2;
+    const y = event.clientY - rippleContainer.y - size / 2;
+
     const newRipple = {
-      x,
-      y,
-      size,
+      left: x,
+      top: y,
+      width: size,
+      height: size,
     };
 
     setRippleArray([...rippleArray, newRipple]);
   };
 
   return (
-    <div className="ripple-container" onMouseDown={addRipple} >
+    <div className="ripple-container" onMouseDown={addRipple}>
       {rippleArray.length > 0 &&
         rippleArray.map((ripple, index) => {
           return (
             <span
               key={"span" + index}
               style={{
-                top: ripple.y,
-                left: ripple.x,
-                width: ripple.size,
-                height: ripple.size,
+                ...ripple,
                 backgroundColor: color,
                 animationDuration: `${duration}ms`,
               }}

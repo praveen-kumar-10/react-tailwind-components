@@ -1,76 +1,25 @@
-import clsx from "clsx";
-import PropTypes from "prop-types";
+import { forwardRef, useMemo, createElement } from "react";
+import { twMerge } from "tailwind-merge";
+
+import { buttonTheme as theme } from "./theme";
+
 import Spinner from "../loader/Spinner";
+import Ripple from "../ripple/Ripple";
 
-import { forwardRef, useMemo, Fragment } from "react";
-
-/**
- * Loaders - https://dev.to/afif/i-made-100-css-loaders-for-your-next-project-4eje, https://dev.to/afif/i-made-100-css-loaders-for-your-next-project-4eje
- */
-
-/**
- * todos:
- * Whenever ElementType is given, role & tabindex should be added. Also check the cursor: "pointer" should be maintained in all cases
- * Add 'active' prop, so if passed the button will shown in active state.
- * Add focus styles
- * Check the Icon Buttons, 'aria-label' should be passed in this case for screen readers
- */
-
-const tailwindButtonClassName = `inline
-py-2
-px-4 
-flex
-items-center
-gap-2
-rounded
-hover:opacity-80
-focus:opacity-80
-disabled:opacity-75
-disabled:hover:opacity-75
-`;
-// focus:ring-4
-
-const SIZES = {
-  sm: "px-2 py-1 text-sm",
-  md: "px-4 py-2",
-  lg: "px-5 py-2.5 text-lg",
-};
-
-const VARIANTS = {
-  text: "bg-transparent",
-  primary: "bg-blue-600 text-white",
-  secondary: "bg-gray-800 text-white",
-  success: "bg-green-600 text-white",
-  warning: "bg-yellow-400",
-  danger: "bg-red-600",
-  info: "bg-sky-400 text-white",
-  light: "bg-white",
-  dark: "bg-gray-900 text-white",
-  link: "bg-transparent underline",
-};
-
-const OUTLINE_VARIANTS = {
-  primary: "text-blue-600 border-blue-600 hover:bg-blue-600 hover:text-white",
-  secondary: "text-gray-800 border-gray-800 hover:bg-gray-800 hover:text-white",
-  success:
-    "text-green-600 border-green-600 hover:bg-green-600 hover:text-white",
-  warning:
-    "text-yellow-400 border-yellow-400 hover:bg-yellow-400 hover:text-black",
-  danger: "text-red-600 border-red-600 hover:bg-red-600 hover:text-white",
-  info: "text-sky-400 border-sky-400 hover:bg-sky-400 hover:text-black",
-  light: "text-white border-white hover:bg-white hover:text-black",
-  dark: "text-gray-900 border-gray-900 hover:bg-gray-900 hover:text-white",
-};
+import ButtonGroup from "./ButtonGroup";
+import ButtonToolbar from "./ButtonToolbar";
+import { baseTheme } from "../theme";
 
 const Button = forwardRef((props, ref) => {
   const {
     size = "md",
     type = "button",
-    elementType: ElementType = "button",
+    as: Component = "button",
     startIcon,
     endIcon,
     className,
-    variant = "text",
+    variant = "primary",
+    soft = false,
     outline = false,
     isLoading = false,
     isLoader = true,
@@ -80,131 +29,127 @@ const Button = forwardRef((props, ref) => {
     loadingIndicator,
     children,
     disabled,
-    active,
+    // active,
+    shadow = "none",
+    rounded,
+    gradientPosition = "right",
+    gradientColors,
+    gradientMonochrome,
+    gradientDuoTone,
     ...buttonProps
   } = props;
 
   let accessibilityProps = useMemo(() => {
-    let accessibilityMap = new Map();
+    // todo: Change the above with Map, just for optimization
+    let accessibilityMap = {};
 
-    if (ElementType !== "button") {
-      console.log({ ElementType });
-      accessibilityMap.set("role", "button");
-      accessibilityMap.set("tabindex", "0");
+    if (Component !== "button") {
+      accessibilityMap = { role: "button", tabIndex: 0 };
     }
 
-    return Object.entries(accessibilityMap);
-  }, [ElementType]);
+    return accessibilityMap;
+  }, [Component]);
 
-  let buttonChildren = useMemo(() => {
-    let btnChildren = [];
+  let loaderProps = useMemo(() => {
+    return {
+      size: loaderSize,
+      animation: loaderAnimation,
+    };
+  }, [loaderAnimation, loaderSize]);
 
-    startIcon && btnChildren.push(startIcon);
-
-    isLoading && loadingIndicator
-      ? btnChildren.push(loadingIndicator)
-      : btnChildren.push(children);
-
-    endIcon && btnChildren.push(endIcon);
-
-    if (isLoading && isLoader) {
-      let loaderProps = {
-        size: loaderSize,
-        animation: loaderAnimation,
-      };
-      if (loaderPosition === "start")
-        btnChildren.unshift(<Spinner {...loaderProps} />);
-      else if (loaderPosition === "end")
-        btnChildren.push(<Spinner {...loaderProps} />);
+  let customGradient = useMemo(() => {
+    if (Array.isArray(gradientColors)) {
+      return gradientColors.map((gradient, idx) => {
+        if (typeof gradient === "object") {
+          if (idx === 0)
+            return [
+              gradient?.color && `from-${gradient?.color}`,
+              gradient?.stop && `from-${gradient?.stop}%`,
+            ];
+          else if (idx === gradientColors?.length - 1)
+            return [
+              gradient?.color && `to-${gradient?.color}`,
+              gradient?.stop && `to-${gradient?.stop}%`,
+            ];
+          else
+            return [
+              gradient?.color && `via-${gradient?.color}`,
+              gradient?.stop && `via-${gradient?.stop}%`,
+            ];
+        } else {
+          return idx === 0
+            ? `from-${gradient}`
+            : idx === gradientColors?.length - 1
+            ? `to-${gradient}`
+            : `via-${gradient}`;
+        }
+      });
     }
-    return btnChildren;
-  }, [
-    children,
-    endIcon,
-    isLoader,
-    isLoading,
-    loaderAnimation,
-    loaderPosition,
-    loaderSize,
-    loadingIndicator,
-    startIcon,
-  ]);
+  }, [gradientColors]);
 
-  return (
-    <ElementType
-      {...{
-        ...buttonProps,
-        ...accessibilityProps,
-        ref,
-        type,
-        disabled,
-      }}
-      className={clsx(
-        tailwindButtonClassName?.split("\n")?.join(" "),
-        variant && !outline && VARIANTS[variant],
-        outline && ["border-2 border-solid", OUTLINE_VARIANTS[variant]],
-        size && SIZES[size],
-        isLoading && "cursor-wait",
+  return createElement(
+    Component,
+    {
+      ref,
+      type,
+      disabled: disabled || isLoading,
+      className: twMerge(
+        theme.base,
+        shadow && theme.shadow[shadow],
+        variant && (theme.variant[variant] ?? theme.variant.primary),
+        outline && [
+          "bg-transparent enabled:hover:text-white",
+          theme.outline[variant],
+        ],
+        soft && [theme.soft[variant]],
+        gradientPosition &&
+          (gradientMonochrome || gradientDuoTone) && [
+            theme.gradientPosition[gradientPosition],
+            "enabled:hover:bg-gradient-to-br",
+          ],
+        gradientColors && [
+          "border-0",
+          theme.gradientPosition[gradientPosition],
+          ...customGradient,
+        ],
+        gradientMonochrome && theme.gradientMonochrome[gradientMonochrome],
+        gradientDuoTone && theme.gradientDuoTone[gradientDuoTone],
+        disabled && theme.disabled,
+        isLoading && theme.isLoading,
+        size && (theme.size[size] || theme.size.md),
+        rounded && (baseTheme.rounded[rounded] ?? theme.rounded.default),
         className
+      ),
+      ...buttonProps,
+      ...accessibilityProps,
+    },
+    <>
+      {isLoading && isLoader && loaderPosition === "start" && (
+        <Spinner {...loaderProps} />
       )}
-    >
-      {buttonChildren?.map((child, idx) => (
-        <Fragment key={idx}>{child}</Fragment>
-      ))}
-    </ElementType>
+
+      {startIcon && startIcon}
+
+      {isLoading && loadingIndicator ? (
+        <span>{loadingIndicator}</span>
+      ) : (
+        <span>{children}</span>
+      )}
+
+      {endIcon && endIcon}
+
+      {isLoading && isLoader && loaderPosition === "end" && (
+        <Spinner {...loaderProps} />
+      )}
+
+      {!isLoading && !disabled && <Ripple />}
+    </>
   );
 });
 
-Button.propTypes = {
-  type: PropTypes.oneOf(["button", "submit", "reset"]),
-  elementType: PropTypes.string,
-  size: PropTypes.oneOf(["sm", "md", "lg"]),
-  variant: PropTypes.oneOf([
-    "text",
-    "primary",
-    "secondary",
-    "success",
-    "danger",
-    "warning",
-    "info",
-    "light",
-    "dark",
-    "link",
-  ]),
-  outline: PropTypes.bool,
-  startIcon: PropTypes.node,
-  endIcon: PropTypes.node,
-  className: PropTypes.string,
-  isLoading: PropTypes.bool,
-  isLoader: PropTypes.bool,
-  loader: PropTypes.node,
-  loaderSize: PropTypes.oneOf(["sm", "md"]),
-  loaderAnimation: PropTypes.oneOf(["spinner", "dots-1"]),
-  loaderPosition: PropTypes.oneOf(["start", "end"]),
-  loadingIndicator: PropTypes.node,
-  disabled: PropTypes.bool,
-  children: PropTypes.node,
-  onClick: PropTypes.func,
-};
+Button.displayName = "Button";
 
-Button.defaultProps = {
-  type: "button",
-  variant: "text",
-  elementType: undefined,
-  outline: false,
-  startIcon: undefined,
-  endIcon: undefined,
-  className: undefined,
-  isLoading: false,
-  isLoader: true,
-  loader: undefined,
-  loaderSize: "sm",
-  loaderAnimation: "spinner",
-  loaderPosition: "start",
-  loadingIndicator: undefined,
-  disabled: false,
-  children: undefined,
-  onClick: undefined,
-};
-
-export default Button;
+export default Object.assign(Button, {
+  Group: ButtonGroup,
+  Toolbar: ButtonToolbar,
+});

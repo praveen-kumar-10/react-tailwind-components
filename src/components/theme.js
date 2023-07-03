@@ -1,0 +1,46 @@
+export const color = {
+  primary: "indigo-600",
+  secondary: "gray-600",
+  success: "green-600",
+  warning: "yellow-400",
+  danger: "red-600",
+  info: "sky-400",
+  dark: "gray-900",
+  light: "slate-100",
+  slate: "slate-600",
+  zinc: "zinc-600",
+  neutral: "neutral-600",
+  stone: "stone-600",
+  orange: "orange-600",
+  amber: "amber-600",
+  yellow: "yellow-400",
+  lime: "lime-600",
+  green: "green-600",
+  emerald: "emerald-600",
+  teal: "teal-600",
+  cyan: "cyan-600",
+  sky: "sky-600",
+  blue: "blue-600",
+  violet: "violet-600",
+  purple: "purple-600",
+  fuchsia: "fuchsia-600",
+  pink: "pink-600",
+  rose: "rose-600",
+};
+
+export const rounded = {
+  default: "rounded",
+  none: "rounded-none",
+  sm: "rounded-sm",
+  md: "rounded-md",
+  lg: "rounded-lg",
+  xl: "rounded-xl",
+  "2xl": "rounded-2xl",
+  "3xl": "rounded-3xl",
+  full: "rounded-full",
+};
+
+export const baseTheme = {
+  color,
+  rounded,
+};

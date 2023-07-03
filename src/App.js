@@ -1,106 +1,19 @@
-import { ReactComponent as TrashIcon } from "assets/icons/trash/trash.svg";
-
-import Button from "./components/buttons/Button";
+import ButtonExample from "./examples/ButtonExample";
+import ButtonGroupExample from "./examples/ButtonGroupExample";
+import ToggleButtonExample from "./examples/ToggleButtonExample";
 
 import "./App.css";
-
-
-const row = `flex gap-4 flex-wrap`;
-
-const VARIANTS = [
-  "text",
-  "primary",
-  "secondary",
-  "success",
-  "warning",
-  "danger",
-  "info",
-  "light",
-  "dark",
-  "link",
-];
-
-const OUTINE_VARIANTS = [
-  "primary",
-  "secondary",
-  "success",
-  "warning",
-  "danger",
-  "info",
-  "light",
-  "dark",
-];
+import IconButtonExample from "./examples/IconButtonExample";
+import BadgeExample from "./examples/BadgeExample";
 
 function App() {
   return (
-    <div className="font-mono h-screen bg-white dark:bg-slate-700 p-10 flex flex-col gap-4">
-      <div className={row}>
-        {VARIANTS?.map((variant) => (
-          <Button key={variant} variant={variant} className="capitalize">
-            {variant}
-          </Button>
-        ))}
-      </div>
-      <div className={row}>
-        {OUTINE_VARIANTS?.map((variant) => (
-          <Button
-            key={variant}
-            outline
-            variant={variant}
-            className="capitalize"
-          >
-            {variant}
-          </Button>
-        ))}
-      </div>
-      <div className='flex items-center gap-1'>
-        <Button variant="primary" size="sm">
-          Small
-        </Button>
-        <Button variant="primary" size="md">
-          Medium
-        </Button>
-        <Button variant="primary" size="lg">
-          Large
-        </Button>
-      </div>
-      <div className={row}>
-        <Button variant="primary" elementType="button">
-          Button Ele
-        </Button>
-        <Button variant="primary" elementType="div">
-          Div
-        </Button>
-        <Button variant="primary" elementType="a" href="#">
-          Anchor
-        </Button>
-      </div>
-      <div className={row}>
-        <Button variant="primary" isLoading>
-          Loading
-        </Button>
-        <Button variant="primary" isLoading loaderAnimation="dots-1">
-          Loading
-        </Button>
-        <Button variant="primary" isLoading loaderPosition="end">
-          Loading
-        </Button>
-        <Button variant="primary" isLoading loaderSize="md">
-          Loading
-        </Button>
-        <Button variant="primary" isLoading loadingIndicator="Loading...">
-          Button
-        </Button>
-        <Button variant="primary" startIcon={<TrashIcon />}>
-          Button
-        </Button>
-        <Button variant="primary" endIcon={<TrashIcon />}>
-          Button
-        </Button>
-        <Button variant="primary" disabled>
-          Disabled
-        </Button>
-      </div>
+    <div className="font-mono bg-white dark:bg-gray-950 p-10 flex flex-col gap-8">
+      <BadgeExample />
+      <ButtonExample />
+      <ButtonGroupExample />
+      <ToggleButtonExample />
+      <IconButtonExample />
     </div>
   );
 }

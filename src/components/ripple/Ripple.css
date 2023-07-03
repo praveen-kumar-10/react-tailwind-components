@@ -1,0 +1,24 @@
+.ripple-container {
+  width: 100%;
+  height: 100%;
+  box-sizing: content-box;
+  position: absolute;
+  overflow: hidden;
+}
+
+.ripple-container span {
+  position: absolute;
+  transform: scale(0);
+  border-radius: 100%;
+  opacity: 0.6;
+  background-color: #fff;
+  animation-name: ripple;
+  animation-duration: 1000ms;
+}
+
+@keyframes ripple {
+  to {
+    opacity: 0;
+    transform: scale(2);
+  }
+}

@@ -12,7 +12,7 @@ const Spinner = ({
   return (
     <span
       className={clsx(
-        animation,
+        animation ? animation : 'spinner',
         size === "sm" ? "w-4 h-4" : size === "md" ? "w-5 h-5" : "",
         className
       )}
@@ -24,7 +24,7 @@ const Spinner = ({
 export default Spinner;
 
 Spinner.propTypes = {
-  animation: ProtoTypes.oneOf(["spinner", "dots-1"]),
+  animation: ProtoTypes.oneOf(["spinner", "dots-1", 'grow', 'grow-1']),
   size: ProtoTypes.oneOf(["sm", "md"]),
   className: ProtoTypes.string,
 };
